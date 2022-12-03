@@ -19,9 +19,14 @@ class RecyclerAdapter(
         return ViewHolder(itemView)
     }
 
+    fun updateList(newList: List<Todo>) {
+        list.clear()
+        list.addAll(newList)
+        this.notifyDataSetChanged()
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-      //  holder.textView.text = list[position].title
+        //  holder.textView.text = list[position].title
         holder.textView.text = "${list[position].title} ${list[position].name}"
         // обработчик нажатия кнопки
         holder.button.setOnClickListener {
@@ -37,6 +42,7 @@ class RecyclerAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView = itemView.findViewById<TextView>(R.id.textView)
+
         // находим кнопку
         val button = itemView.findViewById<Button>(R.id.button)
     }

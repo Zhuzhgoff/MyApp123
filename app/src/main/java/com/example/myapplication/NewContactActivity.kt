@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class NewContactActivity: AppCompatActivity() {
 
-    private val list = mutableListOf<Todo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,6 @@ class NewContactActivity: AppCompatActivity() {
             val name = editTextName.text.toString()
             val phone = editTextPhone.text.toString()
             val id = dbHelper.addTodo(title,name,phone)
-            list.add(Todo(id, title, name,phone))
             val intent = Intent(this@NewContactActivity, MainActivity::class.java)
             startActivity(intent)
 

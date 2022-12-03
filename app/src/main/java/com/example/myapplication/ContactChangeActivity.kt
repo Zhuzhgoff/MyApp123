@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 class ContactChangeActivity: AppCompatActivity() {
 
 
-    private val list = mutableListOf<Todo>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +36,7 @@ class ContactChangeActivity: AppCompatActivity() {
             val title = editText.text.toString()
             val name = editTextName.text.toString()
             val phone = editTextPhone.text.toString()
-            val cool = dbHelper.update(id.toString().toLong(),title,name,phone)
-            list.add(Todo(id.toString().toLong(),title,name,phone))
+            dbHelper.update(id.toString().toLong(),title,name,phone)
             val intent = Intent(this@ContactChangeActivity, MainActivity::class.java)
             startActivity(intent)
         }

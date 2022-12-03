@@ -3,14 +3,14 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
+import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private val list = mutableListOf<Todo>()
+    private var list = mutableListOf<Todo>()
     private lateinit var adapter: RecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,13 +21,50 @@ class MainActivity : AppCompatActivity() {
         var Data = dbHelper.getAll()
         val  editText = findViewById<EditText>(R.id.editTextTextMultiLine)
         list.addAll(Data)
-        editText.doAfterTextChanged { it ->
-            Data = dbHelper.getAll().filter { item ->
-                item.title.contains(it.toString(), true) || item.name.contains(it.toString(), true)
+        var spinner = findViewById<Spinner>(R.id.spinner)
+        val options = arrayOf("Имя","Фамилия")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
+        spinner.adapter = spinnerAdapter
+        var SItem = ""
+        fun listReturn(){
+            val filtered = Data.filter { item ->
+                if (spinner.selectedItem == "Имя") {
+                    return@filter item.name.contains(editText.text.toString(), true)
+                }
+                else{
+                    return@filter item.title.contains(editText.text.toString(), true)
+                }
             }
-            list.clear()
-            list.addAll(Data)
-            adapter.notifyDataSetChanged()
+            adapter.updateList(filtered)
+        }
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // ничего не выбрали
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                listReturn()
+            }
+        }
+        editText.doAfterTextChanged { it ->
+            listReturn()
+            /*val filtered = Data.filter { item ->
+                if (spinner.selectedItem == "Имя") {
+                    return@filter item.name.contains(it.toString(), true)
+                }
+                else{
+                    return@filter item.title.contains(it.toString(), true)
+                }
+            }
+            adapter.updateList(filtered)*/
+            /*list.clear()
+            list.addAll(Data)*/
+            /*adapter.notifyDataSetChanged()*/
         }
         adapter = RecyclerAdapter(list) {
             val id = list[it].id

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,25 +19,31 @@ class ContactActivity: AppCompatActivity()  {
         setContentView(R.layout.activity_contact)
         title = "Контактная информация"
         val dbHelper = DBHelper(this)
-        val Text = findViewById<TextView>(R.id.textView4)
+        /*val Text = findViewById<TextView>(R.id.textView4)
         val TextName = findViewById<TextView>(R.id.textView2)
-        val TextPhone = findViewById<TextView>(R.id.textView6)
+        val TextPhone = findViewById<TextView>(R.id.textView6)*/
+        val Text = findViewById<EditText>(R.id.editTextNumber)
+        val TextName = findViewById<EditText>(R.id.editTextNumber2)
+        val TextPhone = findViewById<EditText>(R.id.editTextNumber3)
         val button = findViewById<Button>(R.id.button)
         val buttonDrop = findViewById<Button>(R.id.button2)
         val buttonChange = findViewById<Button>(R.id.button3)
         val id = intent.getLongExtra("Id",0)
         val objects = dbHelper.getById(id)
 
-        Text.text = "Фамилия:  " + objects?.title
+        /*Text.text = ("Фамилия:  " + objects?.title)
         TextName.text = "Имя:      " + objects?.name
-        TextPhone.text = "Телефон:   " + objects?.telephone
+        TextPhone.text = "Телефон:   " + objects?.telephone*/
+        Text.setText(objects?.title)
+        TextName.setText(objects?.name)
+        TextPhone.setText(objects?.telephone)
 
-        /*TextPhone.setOnClickListener {
+        TextPhone.setOnClickListener {
             val dialIntent = Intent(Intent.ACTION_DIAL)
             dialIntent.data = Uri.parse("tel:"+objects?.telephone)
             startActivity(dialIntent)
-        }*/
-        TextPhone.setOnClickListener {
+        }
+        /*TextPhone.setOnClickListener {
             val REQUEST_CODE = 1
 
             if (ContextCompat.checkSelfPermission(
@@ -56,10 +63,23 @@ class ContactActivity: AppCompatActivity()  {
                 startActivity(callIntent)
 
             }
-        }
-        buttonChange.setOnClickListener {
+        }*/
+        /*buttonChange.setOnClickListener {
             val intent = Intent(this@ContactActivity, ContactChangeActivity::class.java)
             intent.putExtra("Id", id)
+            startActivity(intent)
+        }*/
+        val buttonChangeTrue = findViewById<Button>(R.id.button4)
+        buttonChangeTrue.setOnClickListener {
+            /*val title = editText.text.toString()
+            val name = editTextName.text.toString()
+            val phone = editTextPhone.text.toString()*/
+            val title = Text.text.toString()
+            val name = TextName.text.toString()
+            val phone = TextPhone.text.toString()
+            dbHelper.update(id.toString().toLong(),title,name,phone)
+            /*val intent = Intent(this@ContactChangeActivity, MainActivity::class.java)*/
+            val intent = Intent(this@ContactActivity, MainActivity::class.java)
             startActivity(intent)
         }
         buttonDrop.setOnClickListener {
